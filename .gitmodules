@@ -1,0 +1,15 @@
+[submodule "MiniaudioCpp/vendor/miniaudio"]
+	path = MiniaudioCpp/vendor/miniaudio
+	url = https://github.com/mackron/miniaudio.git
+[submodule "MiniaudioCpp/vendor/dr_libs"]
+	path = MiniaudioCpp/vendor/dr_libs
+	url = https://github.com/mackron/dr_libs.git
+[submodule "MiniaudioCpp/vendor/choc"]
+	path = MiniaudioCpp/vendor/choc
+	url = https://github.com/Tracktion/choc.git
+[submodule "MiniaudioCpp/vendor/c89atomic"]
+	path = MiniaudioCpp/vendor/c89atomic
+	url = https://github.com/mackron/c89atomic.git
+[submodule "MiniaudioCppTests/vendor/googletest"]
+	path = MiniaudioCppTests/vendor/googletest
+	url = https://github.com/google/googletest.git
