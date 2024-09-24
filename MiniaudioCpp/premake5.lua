@@ -23,7 +23,6 @@
 		{
 			"include/MiniaudioCpp",
 			"vendor",
-			"vendor/miniaudio",
 			"vendor/c89atomic",
 			"src/MiniAudioInterface"
 		}
