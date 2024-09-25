@@ -34,8 +34,7 @@ namespace JPL
 		explicit StreamReader(InternalReader* reader) { JPL_ASSERT(reader != nullptr); mReader = reader; }
 
 		JPL_INLINE size_t GetStreamPosition() const { return mReader.GetStreamPosition(); }
-		JPL_INLINE void SetStreamPosition(size_t position) { mReader.SetStreamPosition(position);
-		}
+		JPL_INLINE void SetStreamPosition(size_t position) { mReader.SetStreamPosition(position); }
 		
 		void ReadData(char* destination, size_t size) { mReader.ReadData(destination, size); }
 		
