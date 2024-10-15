@@ -24,6 +24,9 @@
 
 #include <tuple>
 
+// A workaround for borked static_assert within `if constexpr` blocks (#undef at the bottom)
+#define if_constexpr_static_assert(condition, message) []<bool flag = (condition)>(){ static_assert(flag, message); }()
+
 namespace JPL
 {
 	extern ma_allocation_callbacks gEngineAllocationCallbacks;
@@ -69,7 +72,7 @@ namespace JPL
 					if constexpr (std::is_convertible_v<ParamType0, decltype(arg1)>)
 						uninit_function(arg1);
 					else
-						static_assert(false, "No matching argument for the function's parameter type.");
+						if_constexpr_static_assert(false, "No matching argument for the function's parameter type.");
 				}
 				else if constexpr (num_params == 2)
 				{
@@ -90,12 +93,12 @@ namespace JPL
 					}
 					else
 					{
-						static_assert(false, "Cannot determine argument order for the function.");
+						if_constexpr_static_assert(false, "Cannot determine argument order for the function.");
 					}
 				}
 				else
 				{
-					static_assert(false, "The function must have 1 or 2 parameters.");
+					if_constexpr_static_assert(false, "The function must have 1 or 2 parameters.");
 				}
 			}
 
@@ -124,3 +127,5 @@ namespace JPL
 		using HPFNode = Internal::CResource<ma_hpf_node, ma_hpf_node_init, impl::uninit<ma_hpf_node_uninit>>;
 	} // namespace Internal
 } // namespace JPL
+
+#undef if_constexpr_static_assert
