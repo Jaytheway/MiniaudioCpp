@@ -369,9 +369,9 @@ namespace JPL
 			if (!ptr)
 				return nullptr;
 
-			if constexpr (impl::CIsMaBaseNode<TOwner::element_type>)		return ptr;
-			else if constexpr (impl::CHasMemberBase<TOwner::element_type>)		return &ptr->base;
-			else if constexpr (impl::CHasMemberBaseNode<TOwner::element_type>)	return &ptr->baseNode;
+			if constexpr (impl::CIsMaBaseNode<typename TOwner::element_type>)		return ptr;
+			else if constexpr (impl::CHasMemberBase<typename TOwner::element_type>)		return &ptr->base;
+			else if constexpr (impl::CHasMemberBaseNode<typename TOwner::element_type>)	return &ptr->baseNode;
 			else
 			{
 				//? assuming this is ma_sound
