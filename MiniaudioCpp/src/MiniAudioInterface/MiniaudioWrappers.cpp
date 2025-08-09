@@ -201,7 +201,7 @@ namespace JPL
 
 	void EngineNode::SetPitch(float pitch)
 	{
-		if (const ma_engine_node* node = get())
+		if ([[maybe_unused]]const ma_engine_node* node = get())
 		{
 			if (pitch <= 0)
 				return;
@@ -426,7 +426,7 @@ namespace JPL
 															mCutoffFrequency,
 															mOrder);
 
-			ma_result result = ma_lpf_node_reinit(&config, node);
+			[[maybe_unused]]ma_result result = ma_lpf_node_reinit(&config, node);
 			JPL_ASSERT(result == MA_SUCCESS);
 		}
 	}
@@ -476,7 +476,7 @@ namespace JPL
 															mCutoffFrequency,
 															mOrder);
 
-			ma_result result = ma_hpf_node_reinit(&config, node);
+			[[maybe_unused]] ma_result result = ma_hpf_node_reinit(&config, node);
 			JPL_ASSERT(result == MA_SUCCESS);
 		}
 	}
