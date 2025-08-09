@@ -41,8 +41,8 @@ namespace JPL
 	}
 
 	template<bool IsInput> struct Bus;
-	using InputBus = typename Bus<true>;
-	using OutputBus = typename Bus<false>;
+	using InputBus = Bus<true>;
+	using OutputBus = Bus<false>;
 	struct NodeIO;
 
 	//======================================================================
@@ -51,7 +51,7 @@ namespace JPL
 	using OutputBusIndex = typename Traits::BusIndex<OutputBus>;
 
 	//==========================================================================
-	/// Type-errased, safe to copy, Bus interface wrapper
+	/// Type-erased, safe to copy, Bus interface wrapper
 	template<bool IsInput>
 	struct Bus
 	{
@@ -369,9 +369,9 @@ namespace JPL
 			if (!ptr)
 				return nullptr;
 
-			if constexpr (impl::CIsMaBaseNode<TOwner::element_type>)		return ptr;
-			else if constexpr (impl::CHasMemberBase<TOwner::element_type>)		return &ptr->base;
-			else if constexpr (impl::CHasMemberBaseNode<TOwner::element_type>)	return &ptr->baseNode;
+			if constexpr (impl::CIsMaBaseNode<typename TOwner::element_type>)		return ptr;
+			else if constexpr (impl::CHasMemberBase<typename TOwner::element_type>)		return &ptr->base;
+			else if constexpr (impl::CHasMemberBaseNode<typename TOwner::element_type>)	return &ptr->baseNode;
 			else
 			{
 				//? assuming this is ma_sound

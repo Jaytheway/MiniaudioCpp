@@ -239,7 +239,7 @@ namespace JPL
 
 
 	//==========================================================================
-	struct Engine	: Traits::EngineNodeTraits<Internal::Engine>
+	struct Engine : Traits::EngineNodeTraits<Internal::Engine>
 	{
 		bool Init(uint32_t numChannels, ma_vfs* vfs);
 		uint32_t GetSampleRate() const;
@@ -247,10 +247,22 @@ namespace JPL
 		InputBus GetEndpointBus();
 	};
 
-	struct BaseNode;
+	//==========================================================================
+	// Initialization utility for custom nodes, used by TBaseNode
+	struct BaseNode
+	{
+		BaseNode() = delete;
+
+	private:
+		template<class TNode>
+		friend struct TBaseNode;
+		//friend bool TBaseNode<TNode>::Init(const NodeLayout& nodeLayout, bool initStarted);
+		static ma_node_config InitConfig(const NodeLayout& nodeLayout, bool initStarted = true);
+	};
+
 	//==========================================================================
 	template<class TNode>
-	struct TBaseNode	: Traits::NodeDefaultTraits<Internal::TNodeBase<TNode>>
+	struct TBaseNode : Traits::NodeDefaultTraits<Internal::TNodeBase<TNode>>
 	{
 		TRAIT_DEFS(Internal::TNodeBase<TNode>);
 
@@ -314,18 +326,6 @@ namespace JPL
 
 			static_cast<TNode*>(pNode)->Process(std::ref(callbackData));
 		}
-	};
-
-	//==========================================================================
-	// Initialization utility for custom nodes, used by TBaseNode
-	struct BaseNode
-	{
-		BaseNode() = delete;
-
-	private:
-		template<class TNode>
-		friend bool TBaseNode<TNode>::Init(const NodeLayout& nodeLayout, bool initStarted);
-		static ma_node_config InitConfig(const NodeLayout& nodeLayout, bool initStarted = true);
 	};
 
 	//==========================================================================
