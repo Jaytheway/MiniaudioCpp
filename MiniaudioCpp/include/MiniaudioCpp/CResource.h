@@ -22,6 +22,7 @@
 #include <utility>
 #include <type_traits>
 #include <concepts>
+#include <cstring>
 
 namespace JPL::Internal
 {
