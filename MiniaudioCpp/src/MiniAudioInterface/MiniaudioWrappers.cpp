@@ -354,14 +354,14 @@ namespace JPL
 	{
 		ma_uint64 lengthPCFrames = 0;
 		ma_sound_get_length_in_pcm_frames(get(), &lengthPCFrames);
-		return (uint64_t) lengthPCFrames;
+		return static_cast<uint64_t>(lengthPCFrames);
 	}
 
 	uint64_t Sound::GetCursorInFrames()
 	{
 		ma_uint64 cursorPCMFrame = 0;
 		ma_sound_get_cursor_in_pcm_frames(get(), &cursorPCMFrame);
-		return (uint64_t) cursorPCMFrame;
+		return static_cast<uint64_t>(cursorPCMFrame);
 	}
 
 	float Sound::GetLengthInSeconds()
