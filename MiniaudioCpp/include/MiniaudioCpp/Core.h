@@ -61,12 +61,12 @@
 #if defined(JPL_PLATFORM_WINDOWS)
 #define JPL_BREAKPOINT		__debugbreak()
 #elif defined(JPL_PLATFORM_LINUX) || defined(JPL_PLATFORM_ANDROID) || defined(JPL_PLATFORM_MACOS) || defined(JPL_PLATFORM_IOS) || defined(JPL_PLATFORM_FREEBSD)
-#if defined(JPL_CPU_X86)
+#ifdef __has_builtin
+#if __has_builtin(__builtin_trap)
+#define JPL_BREAKPOINT	__builtin_trap()
+#endif
+#elif defined(JPL_CPU_X86)
 #define JPL_BREAKPOINT	__asm volatile ("int $0x3")
-#elif defined(JPL_CPU_ARM)
-#define JPL_BREAKPOINT	__builtin_trap()
-#elif defined(JPL_CPU_E2K)
-#define JPL_BREAKPOINT	__builtin_trap()
 #endif
 #elif defined(JPL_PLATFORM_WASM)
 #define JPL_BREAKPOINT		do { } while (false) // Not supported
