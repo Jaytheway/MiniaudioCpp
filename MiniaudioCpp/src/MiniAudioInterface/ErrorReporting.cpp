@@ -20,8 +20,6 @@
 #include "ErrorReporting.h"
 
 #include <iostream>
-#include <format>
-#include <cstdarg>
 
 namespace JPL
 {
@@ -39,7 +37,7 @@ namespace JPL
 		return true; // Trigger breakpoint
 	};
 
-	AssertFailedFunction AssertFailed = DummyAssertFailed;
+	AssertFailedFunction McppAssertFailed = DummyAssertFailed;
 
 #endif // JPL_ENABLE_ASSERTS
 

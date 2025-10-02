@@ -45,12 +45,12 @@ JPL_EXPORT extern TraceFunction Trace;
 #if defined(JPL_ENABLE_ASSERTS) || defined(JPL_ENABLE_ENSURE)
 /// Function called when an assertion fails. This function should return true if a breakpoint needs to be triggered
 using AssertFailedFunction = bool(*)(const char* inExpression, const char* inMessage, const char* inFile, uint inLine);
-JPL_EXPORT extern AssertFailedFunction AssertFailed;
+JPL_EXPORT extern AssertFailedFunction McppAssertFailed;
 
 // Helper functions to pass message on to failed function
 struct AssertLastParam {};
-inline bool AssertFailedParamHelper(const char* inExpression, const char* inFile, uint inLine, AssertLastParam) { return AssertFailed(inExpression, nullptr, inFile, inLine); }
-inline bool AssertFailedParamHelper(const char* inExpression, const char* inFile, uint inLine, const char* inMessage, AssertLastParam) { return AssertFailed(inExpression, inMessage, inFile, inLine); }
+inline bool AssertFailedParamHelper(const char* inExpression, const char* inFile, uint inLine, AssertLastParam) { return McppAssertFailed(inExpression, nullptr, inFile, inLine); }
+inline bool AssertFailedParamHelper(const char* inExpression, const char* inFile, uint inLine, const char* inMessage, AssertLastParam) { return McppAssertFailed(inExpression, inMessage, inFile, inLine); }
 #endif
 
 #ifdef JPL_ENABLE_ASSERTS
