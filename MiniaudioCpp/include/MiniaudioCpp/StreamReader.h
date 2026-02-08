@@ -30,7 +30,7 @@ namespace JPL
 		StreamReader() requires (InternalReader()) { mReader = new InternalReader(); }
 		virtual ~StreamReader() { delete mReader; }
 		
-		explicit StreamReader(const char* filePath) requires (InternalReader(filePath)) { mReader = new InternalReader(filePath); }
+		explicit StreamReader(const char* filePath) requires (InternalReader(filePath) -> InternalReader) { mReader = new InternalReader(filePath); }
 		explicit StreamReader(InternalReader* reader) { JPL_ASSERT(reader != nullptr); mReader = reader; }
 
 		JPL_INLINE size_t GetStreamPosition() const { return mReader->GetStreamPosition(); }

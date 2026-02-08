@@ -44,8 +44,18 @@ namespace JPL
 		return sEngine;
 	}
 
+	static ma_allocation_callbacks GetDefaultMAAllocationCallbacks()
+	{
+		return ma_allocation_callbacks{
+			.pUserData = nullptr,
+			.onMalloc = nullptr,//[](size_t size, void*) -> void* { return malloc(size); },
+			.onRealloc = nullptr, //[](void* ptr, size_t size, void*) -> void* { return realloc(ptr, size); },
+			.onFree = nullptr //[](void* ptr, void*) -> void { free(ptr); },
+		};
+	}
+
 	GetMiniaudioEngineFunction GetMiniaudioEngine = DummyGetMiniaudioEngine;
-	ma_allocation_callbacks gEngineAllocationCallbacks = ma_allocation_callbacks{};
+	ma_allocation_callbacks* gEngineAllocationCallbacks = nullptr; //GetDefaultMAAllocationCallbacks();
 
 	namespace // log
 	{
@@ -81,7 +91,7 @@ namespace JPL
 		ma_result result = MA_SUCCESS;
 
 		ma_engine_config engineConfig = ma_engine_config_init();
-		engineConfig.allocationCallbacks = gEngineAllocationCallbacks;
+		engineConfig.allocationCallbacks = GetDefaultMAAllocationCallbacks();
 
 		// Channel count is only honored if using custom device or MA_NO_DEVICE_IO
 		engineConfig.channels = numChannels;
@@ -91,7 +101,7 @@ namespace JPL
 
 		// Hook up logging
 		{
-			result = ma_log_init(&gEngineAllocationCallbacks, &g_maLog);
+			result = ma_log_init(gEngineAllocationCallbacks, &g_maLog);
 			JPL_ASSERT(result == MA_SUCCESS, "Failed to initialize miniaudio logger.");
 			
 			ma_log_callback logCallback = ma_log_callback_init(&MALogCallback, nullptr);
@@ -117,6 +127,17 @@ namespace JPL
 	uint32_t Engine::GetSampleRate() const
 	{
 		return ma_engine_get_sample_rate(get());
+	}
+
+	uint32_t Engine::GetProcessingSizeInFrames() const
+	{
+		if (auto* node = get())
+		{
+			return node->nodeGraph.processingSizeInFrames > 0
+				? node->nodeGraph.processingSizeInFrames
+				: MA_DEFAULT_NODE_CACHE_CAP_IN_FRAMES_PER_BUS;
+		}
+		return 0;
 	}
 
 	InputBus Engine::GetEndpointBus()
@@ -149,7 +170,7 @@ namespace JPL
 			ma_splitter_node_config splitterConfig = ma_splitter_node_config_init(numChannels);
 			splitterConfig.outputBusCount = std::max(1u, numOutputBusses);
 
-			const ma_result result = emplace(&engine->nodeGraph, &splitterConfig, &gEngineAllocationCallbacks);
+			const ma_result result = emplace(&engine->nodeGraph, &splitterConfig, gEngineAllocationCallbacks);
 			
 			if (!JPL_ENSURE(!result))
 			{
@@ -181,7 +202,7 @@ namespace JPL
 			nodeConfig.volumeSmoothTimeInPCMFrames = settings.VolumeFadeFrameCount;
 			nodeConfig.isPitchDisabled = settings.PitchDisabled;
 
-			ma_result result = emplace(&nodeConfig, &gEngineAllocationCallbacks);
+			ma_result result = emplace(&nodeConfig, gEngineAllocationCallbacks);
 
 			if (!JPL_ENSURE(!result))
 			{
@@ -397,7 +418,7 @@ namespace JPL
 																mCutoffFrequency,
 																mOrder);
 
-			const ma_result result = emplace(&engine->nodeGraph, &config, &gEngineAllocationCallbacks);
+			const ma_result result = emplace(&engine->nodeGraph, &config, gEngineAllocationCallbacks);
 
 			if (!JPL_ENSURE(!result))
 			{
@@ -447,7 +468,7 @@ namespace JPL
 																mCutoffFrequency,
 																mOrder);
 
-			const ma_result result = emplace(&engine->nodeGraph, &config, &gEngineAllocationCallbacks);
+			const ma_result result = emplace(&engine->nodeGraph, &config, gEngineAllocationCallbacks);
 
 			if (!JPL_ENSURE(!result))
 			{

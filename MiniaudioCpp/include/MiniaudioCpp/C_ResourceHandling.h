@@ -29,7 +29,7 @@
 
 namespace JPL
 {
-	extern ma_allocation_callbacks gEngineAllocationCallbacks;
+	extern ma_allocation_callbacks* gEngineAllocationCallbacks;
 }
 
 namespace JPL
@@ -63,7 +63,7 @@ namespace JPL
 
 				// Available arguments
 				auto arg1 = param;
-				auto arg2 = &gEngineAllocationCallbacks;
+				auto arg2 = gEngineAllocationCallbacks;
 
 				if constexpr (num_params == 1)
 				{

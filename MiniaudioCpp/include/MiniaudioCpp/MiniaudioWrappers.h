@@ -21,6 +21,10 @@
 
 #include "Core.h"
 #include "ErrorReporting.h"
+
+#ifndef MA_DEFAULT_NODE_CACHE_CAP_IN_FRAMES_PER_BUS
+#define MA_DEFAULT_NODE_CACHE_CAP_IN_FRAMES_PER_BUS 480
+#endif
 #include "NodeTraits.h"
 
 #include "choc/containers/choc_SmallVector.h"
@@ -48,7 +52,7 @@ namespace JPL
 	/// These must be set by the client
 	using GetMiniaudioEngineFunction = MA::Engine& (*)(void* context);
 	JPL_EXPORT extern GetMiniaudioEngineFunction GetMiniaudioEngine;
-	JPL_EXPORT extern ma_allocation_callbacks gEngineAllocationCallbacks;
+	JPL_EXPORT extern ma_allocation_callbacks* gEngineAllocationCallbacks;
 
 
 	//==========================================================================
@@ -244,6 +248,7 @@ namespace JPL
 		bool Init(uint32_t numChannels, ma_vfs* vfs);
 		uint32_t GetSampleRate() const;
 		inline double GetSampleRateDouble() const { return static_cast<double>(GetSampleRate()); }
+		uint32_t GetProcessingSizeInFrames() const;
 		InputBus GetEndpointBus();
 	};
 
@@ -293,7 +298,7 @@ namespace JPL
 			config.vtable = &vtable;
 
 			ma_engine* engine = GetMiniaudioEngine(nullptr);
-			const ma_result result = this->emplace(&engine->nodeGraph, &config, &gEngineAllocationCallbacks);
+			const ma_result result = this->emplace(&engine->nodeGraph, &config, gEngineAllocationCallbacks);
 
 			if (!JPL_ENSURE(!result))
 			{
