@@ -365,7 +365,7 @@ namespace JPL
 	{
 		TRAIT_DEFS(Internal::Sound);
 
-		bool Init(const char* filePathOrId, uint32_t flags);
+		bool Init(const char* filePathOrId, uint32_t flags, bool bUseSourceChannelCount = false);
 		bool InitFromDataSource(Internal::DataSource& dataSource, uint32_t flags);
 
 		void SetVolume(float volume);

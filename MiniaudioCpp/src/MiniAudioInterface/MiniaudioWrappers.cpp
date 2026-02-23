@@ -249,15 +249,37 @@ namespace JPL
 	}
 
 	//==========================================================================
-	bool Sound::Init(const char* filePathOrId, uint32_t flags)
+	bool Sound::Init(const char* filePathOrId, uint32_t flags, bool bUseSourceChannelCount)
 	{
 		if (Engine& engine = GetMiniaudioEngine(nullptr))
 		{
 			// Force disable miniaudio's spatialization, we use our own spatializer
 			flags |= MA_SOUND_FLAG_NO_SPATIALIZATION;
 
-			ma_result result = emplace(engine, filePathOrId, flags, static_cast<ma_sound_group*>(nullptr), static_cast<ma_fence*>(nullptr));
-			
+			ma_result result = MA_INVALID_ARGS;
+			if (bUseSourceChannelCount)
+			{
+				// We let the user handle attachmet, becaues miniaudio won't initialize
+				// the sound if the channel count requested doesn't match the default attachment.
+				flags |= MA_SOUND_FLAG_NO_DEFAULT_ATTACHMENT;
+
+				reset(new ma_sound());
+
+				ma_sound_config config;
+				config = ma_sound_config_init_2(engine.get());
+				config.pFilePath = filePathOrId;
+				config.flags = flags;
+				config.pInitialAttachment = nullptr;
+				config.pDoneFence = nullptr;
+				config.channelsOut = MA_SOUND_SOURCE_CHANNEL_COUNT;
+				
+				result = ma_sound_init_ex(engine.get(), &config, get());
+			}
+			else
+			{
+				result = emplace(engine, filePathOrId, flags, static_cast<ma_sound_group*>(nullptr), static_cast<ma_fence*>(nullptr));
+			}
+
 			if (!JPL_ENSURE(!result))
 			{
 				ma_sound* node = release();
