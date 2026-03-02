@@ -19,14 +19,11 @@
 
 #ifdef JPL_TEST
 
-#include "MiniaudioCpp/MiniaudioWrappers.h"
+#include "MiniaudioCpp/Core.h"
 #include "MiniaudioCpp/ErrorReporting.h"
-#include "MiniaudioCpp/VFS.h"
+#include "MiniaudioCpp/MiniaudioWrappers.h"
 
 #include "miniaudio/miniaudio.h"
-
-#include "Tests/NodeTraitsTest.h"
-#include "Tests/MiniaudioWrappersTest.h"
 
 #undef max
 #undef min
@@ -128,6 +125,13 @@ void* MemReallocCallback(void* p, size_t sz, void* pUserData)
 	return newBuffer + offset;
 }
 
+ma_allocation_callbacks gMAAllocationCallbacks{
+	.pUserData = &sMemoryUsedByEngine,
+	.onMalloc = MemAllocCallback,
+	.onRealloc = MemReallocCallback,
+	.onFree = MemFreeCallback
+};
+
 //==========================================================================
 static void Main(int argc, char* argv[])
 {
@@ -136,19 +140,9 @@ static void Main(int argc, char* argv[])
 
 	JPL::GetMiniaudioEngine = GetMiniaudioEngine;
 #ifdef JPL_PLATFORM_WINDOWS
-	JPL::gEngineAllocationCallbacks = ma_allocation_callbacks{
-												.pUserData = &sMemoryUsedByEngine,
-												.onMalloc = MemAllocCallback,
-												.onRealloc = MemReallocCallback,
-												.onFree = MemFreeCallback
-	};
+	JPL::gEngineAllocationCallbacks = &gMAAllocationCallbacks;
 #else
-	JPL::gEngineAllocationCallbacks = ma_allocation_callbacks{
-												nullptr,
-												[](size_t size, void*) -> void* { return malloc(size); },
-												[](void* ptr, size_t size, void*) -> void* { return realloc(ptr, size); },
-												[](void* ptr, void*) -> void { free(ptr); },
-	};
+	JPL::gEngineAllocationCallbacks = nullptr;
 #endif
 }
 

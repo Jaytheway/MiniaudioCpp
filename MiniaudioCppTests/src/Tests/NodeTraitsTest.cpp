@@ -21,6 +21,8 @@
 
 #ifdef JPL_TEST
 
+#include "MiniaudioCpp/Core.h"
+#include "MiniaudioCpp/ErrorReporting.h"
 #include "MiniaudioCpp/NodeTraits.h"
 #include "MiniaudioCpp/Core.h"
 

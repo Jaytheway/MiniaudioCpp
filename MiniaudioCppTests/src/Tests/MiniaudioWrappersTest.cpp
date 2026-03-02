@@ -22,6 +22,9 @@
 #ifdef JPL_TEST
 
 #include "MiniaudioCpp/Core.h"
+#include "MiniaudioCpp/ErrorReporting.h"
+#include "MiniaudioCpp/MiniaudioWrappers.h"
+#include "MiniaudioCpp/VFS.h"
 
 #include "choc/audio/choc_SampleBuffers.h"
 #include "choc/audio/choc_AudioFileFormat_WAV.h"
@@ -114,10 +117,10 @@ namespace JPL
 		{
 			if (!MiniaudioWrappersTest::engine)
 			{
-				engineVfs.init(&JPL::gEngineAllocationCallbacks);
+				engineVfs.init(JPL::gEngineAllocationCallbacks);
 
 				MiniaudioWrappersTest::engine.reset(new ma_engine());
-				JPL_ASSERT(MiniaudioWrappersTest::engine.Init(2, &engineVfs));
+				JPL_ENSURE(MiniaudioWrappersTest::engine.Init(2, &engineVfs));
 			}
 
 			JPL::GetMiniaudioEngine = MiniaudioWrappersTest::GetMiniaudioEngine;
