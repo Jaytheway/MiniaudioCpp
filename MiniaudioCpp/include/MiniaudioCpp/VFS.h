@@ -1,7 +1,6 @@
 #pragma once
 
-#include "Core.h"
-#include "ErrorReporting.h"
+#include "CoreInclude.h"
 #include "StreamReader.h"
 
 #include "miniaudio/miniaudio.h"

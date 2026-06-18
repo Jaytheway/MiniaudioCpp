@@ -21,8 +21,6 @@
 
 #include "VFS.h"
 
-#include "ErrorReporting.h"
-
 // We have to import this stuff because miniaudio
 // doesn't expose some of the functionality we need
 #include "c89atomic.h"

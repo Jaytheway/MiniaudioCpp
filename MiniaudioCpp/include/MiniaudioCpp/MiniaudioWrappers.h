@@ -19,8 +19,7 @@
 
 #pragma once
 
-#include "Core.h"
-#include "ErrorReporting.h"
+#include "CoreInclude.h"
 
 #ifndef MA_DEFAULT_NODE_CACHE_CAP_IN_FRAMES_PER_BUS
 #define MA_DEFAULT_NODE_CACHE_CAP_IN_FRAMES_PER_BUS 480
