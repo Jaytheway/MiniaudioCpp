@@ -1,7 +1,7 @@
 add_library(MiniaudioCpp STATIC)
 add_library(JPL::MiniaudioCpp ALIAS MiniaudioCpp)
 
-jpl_enable_ipo()
+#jpl_enable_ipo()
 
 # ---- MiniaudioCpp static library
 file(GLOB_RECURSE MINIAUDIOCPP_SOURCES
