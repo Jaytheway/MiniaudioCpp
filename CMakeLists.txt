@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.28)
 
 project(MiniaudioCpp LANGUAGES CXX)
 
-list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
+list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
 
 # Enable Interprocedural Optimization if requested and supported
 include(cmake/InterProcessOptimization.cmake)
