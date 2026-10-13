@@ -145,8 +145,8 @@ namespace JPL
 			template<class ma_node_t> requires (!JPL::Internal::c_is_c_resoruce<ma_node_t>)
 				bool AttachTo(uint32_t outputBus, ma_node_t& target, uint32_t targetInputus);
 
-			JPL_INLINE OutputBus OutputBus(uint32_t busIndex);
-			JPL_INLINE InputBus InputBus(uint32_t busIndex);
+			JPL_INLINE JPL::OutputBus OutputBus(uint32_t busIndex);
+			JPL_INLINE JPL::InputBus InputBus(uint32_t busIndex);
 			JPL_INLINE const Bus<false> OutputBus(uint32_t busIndex) const;
 		};
 
@@ -426,19 +426,19 @@ namespace JPL
 		}
 
 		template<class TUnderlying>
-		inline OutputBus NodeRouting<TUnderlying>::OutputBus(uint32_t busIndex)
+		inline JPL::OutputBus NodeRouting<TUnderlying>::OutputBus(uint32_t busIndex)
 		{
 			return Traits::impl::BusImpl(busIndex, static_cast<TUnderlying*>(this));
 		}
 
 		template<class TUnderlying>
-		inline InputBus NodeRouting<TUnderlying>::InputBus(uint32_t busIndex)
+		inline JPL::InputBus NodeRouting<TUnderlying>::InputBus(uint32_t busIndex)
 		{
 			return Traits::impl::BusImpl(busIndex, static_cast<TUnderlying*>(this));
 		}
 
 		template<class TUnderlying>
-		inline const OutputBus NodeRouting<TUnderlying>::OutputBus(uint32_t busIndex) const
+		inline const JPL::OutputBus NodeRouting<TUnderlying>::OutputBus(uint32_t busIndex) const
 		{
 			return Traits::impl::BusImpl(busIndex, static_cast<const TUnderlying*>(this));
 		}
