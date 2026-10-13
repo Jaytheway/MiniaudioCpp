@@ -176,7 +176,7 @@ namespace JPL
 
 		NodeLayout& WithBusConfig(const BusConfig& busConfig) { BusConfig = busConfig; return *this; }
 		
-		BusConfig BusConfig;
+		JPL::BusConfig BusConfig;
 	};
 
 	//==========================================================================
